@@ -1,0 +1,40 @@
+# Security configuration for uploads directory
+Options -Indexes
+Options -ExecCGI
+
+# Prevent execution of PHP files
+<Files *.php>
+    Deny from all
+</Files>
+
+# Allow specific file types only
+<FilesMatch "\.(jpg|jpeg|png|gif|pdf|doc|docx)$">
+    Allow from all
+</FilesMatch>
+
+# Deny everything else
+<FilesMatch ".*">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Override for allowed extensions
+<FilesMatch "\.(jpg|jpeg|png|gif|pdf|doc|docx)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options nosniff
+    Header set X-Frame-Options DENY
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Prevent hotlinking
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP_REFERER} !^$
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?yourdomain\.com [NC]
+    RewriteRule \.(jpg|jpeg|png|gif|pdf)$ - [F,L]
+</IfModule>

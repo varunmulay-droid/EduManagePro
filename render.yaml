@@ -1,0 +1,9 @@
+
+services:
+  - type: web
+    name: edumanagepro
+    env: php
+    plan: free
+    buildCommand: ""
+    startCommand: ""
+    rootDir: .
